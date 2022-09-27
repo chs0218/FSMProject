@@ -140,12 +140,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseGameEntity.h" />
+    <ClInclude Include="ConsoleUtils.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EntityNames.h" />
-    <ClInclude Include="Location.h" />
+    <ClInclude Include="Locations.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="Student.h" />
+    <ClInclude Include="StudentOwnedStates.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseGameEntity.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FSMProject.cpp" />
+    <ClCompile Include="Student.cpp" />
+    <ClCompile Include="StudentOwnedStates.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
