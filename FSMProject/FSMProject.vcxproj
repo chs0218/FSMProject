@@ -144,6 +144,8 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EntityNames.h" />
     <ClInclude Include="Locations.h" />
+    <ClInclude Include="PizzaStoreOwner.h" />
+    <ClInclude Include="PizzaStoreOwnerOwnedStates.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Student.h" />
@@ -153,6 +155,8 @@
     <ClCompile Include="BaseGameEntity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FSMProject.cpp" />
+    <ClCompile Include="PizzaStoreOwner.cpp" />
+    <ClCompile Include="PizzaStoreOwnerOwnedStates.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="StudentOwnedStates.cpp" />
   </ItemGroup>

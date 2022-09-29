@@ -9,7 +9,6 @@ private:
 	StayHomeAndRest(const StayHomeAndRest&);
 	StayHomeAndRest& operator=(const StayHomeAndRest&);
 public:
-	//this is a singleton
 	static StayHomeAndRest* Instance();
 
 	virtual void Enter(Student* pStudent);
@@ -21,3 +20,56 @@ public:
 	virtual bool OnMessage(Student* pStudent, const Telegram& msg);
 };
 
+class EatPizza : public State<Student>
+{
+private:
+	EatPizza() {}
+	EatPizza(const EatPizza&);
+	EatPizza& operator=(const EatPizza&);
+public:
+	static EatPizza* Instance();
+
+	virtual void Enter(Student* pStudent);
+
+	virtual void Execute(Student* pStudent);
+
+	virtual void Exit(Student* pStudent);
+
+	virtual bool OnMessage(Student* pStudent, const Telegram& msg);
+};
+
+class PlayGame : public State<Student>
+{
+private:
+	PlayGame() {}
+	PlayGame(const PlayGame&);
+	PlayGame& operator=(const PlayGame&);
+public:
+	static PlayGame* Instance();
+
+	virtual void Enter(Student* pStudent);
+
+	virtual void Execute(Student* pStudent);
+
+	virtual void Exit(Student* pStudent);
+
+	virtual bool OnMessage(Student* pStudent, const Telegram& msg);
+};
+
+class GoLibraryAndStudy : public State<Student>
+{
+private:
+	GoLibraryAndStudy() {}
+	GoLibraryAndStudy(const PlayGame&);
+	GoLibraryAndStudy& operator=(const PlayGame&);
+public:
+	static GoLibraryAndStudy* Instance();
+
+	virtual void Enter(Student* pStudent);
+
+	virtual void Execute(Student* pStudent);
+
+	virtual void Exit(Student* pStudent);
+
+	virtual bool OnMessage(Student* pStudent, const Telegram& msg);
+};

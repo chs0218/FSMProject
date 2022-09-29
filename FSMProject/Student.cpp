@@ -31,3 +31,12 @@ bool Student::Fatigued() const
 
     return false;
 }
+
+bool Student::Rested() const
+{
+    if (m_iFatigue < 1)
+    {
+        return true;
+    }
+    return false;
+}

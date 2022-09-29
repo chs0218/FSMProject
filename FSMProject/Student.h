@@ -47,14 +47,18 @@ public:
     void          ChangeLocation(location_type loc) { m_Location = loc; }
 
     int           StudyLeft()const { return m_iLeftStudy; }
-    void          SetStudyLeft(int val) { m_iLeftStudy = val; }
+    void          IncreasStudyLeft() { m_iLeftStudy += 1; }
+    void          DoStudy() { m_iLeftStudy -= 1; }
+    bool          FinishStudy()const { return m_iLeftStudy < 1; }
     bool          HaveToStudy()const { return m_iLeftStudy >= StudyLevel; }
 
     bool          Fatigued() const;
+    bool          Rested() const;
     void          DecreaseFatigue() { m_iFatigue -= 1; }
     void          IncreaseFatigue() { m_iFatigue += 1; }
 
     bool          Hungry()const;
+    void          IncreaseHunger() { m_iHungry += 1; }
     void          BuyAndEatPizza() { m_iHungry = 0; }
 };
 

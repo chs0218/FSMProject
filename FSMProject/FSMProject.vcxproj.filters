@@ -42,6 +42,12 @@
     <ClInclude Include="StudentOwnedStates.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PizzaStoreOwner.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PizzaStoreOwnerOwnedStates.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FSMProject.cpp">
@@ -57,6 +63,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="StudentOwnedStates.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PizzaStoreOwner.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PizzaStoreOwnerOwnedStates.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
