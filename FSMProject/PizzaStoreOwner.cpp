@@ -12,3 +12,22 @@ void PizzaStoreOwner::Update()
 
     m_pStateMachine->Update();
 }
+
+bool PizzaStoreOwner::Fatigued() const
+{
+    if (m_iFatigue > PSOFatigueLevel)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool PizzaStoreOwner::Rested() const
+{
+    if (m_iFatigue < 1)
+    {
+        return true;
+    }
+    return false;
+}

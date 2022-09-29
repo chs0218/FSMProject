@@ -3,5 +3,6 @@ enum location_type
 {
 	home,
 	library,
-	pcRoom
+	pcRoom,
+	pizzaStore
 };
