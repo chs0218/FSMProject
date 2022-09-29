@@ -34,7 +34,7 @@ public:
         BaseGameEntity(id)
     {
         m_pStateMachine = new StateMachine<Student>(this);
-        //m_pStateMachine->SetCurrentState(GoHomeAndSleepTilRested::Instance());
+        m_pStateMachine->SetCurrentState(StayHomeAndRest::Instance());
     }
     ~Student() { delete m_pStateMachine; }
 
