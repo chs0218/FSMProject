@@ -129,7 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,20 +141,30 @@
   <ItemGroup>
     <ClInclude Include="BaseGameEntity.h" />
     <ClInclude Include="ConsoleUtils.h" />
+    <ClInclude Include="CrudeTimer.h" />
+    <ClInclude Include="Delivery.h" />
+    <ClInclude Include="DeliveryOwnedState.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EntityNames.h" />
     <ClInclude Include="Locations.h" />
+    <ClInclude Include="MessageDispatcher.h" />
+    <ClInclude Include="MessageTypes.h" />
     <ClInclude Include="PizzaStoreOwner.h" />
     <ClInclude Include="PizzaStoreOwnerOwnedStates.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="StudentOwnedStates.h" />
+    <ClInclude Include="Telegram.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseGameEntity.cpp" />
+    <ClCompile Include="CrudeTimer.cpp" />
+    <ClCompile Include="Delivery.cpp" />
+    <ClCompile Include="DeliveryOwnedState.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FSMProject.cpp" />
+    <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="PizzaStoreOwner.cpp" />
     <ClCompile Include="PizzaStoreOwnerOwnedStates.cpp" />
     <ClCompile Include="Student.cpp" />

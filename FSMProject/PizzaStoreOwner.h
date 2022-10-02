@@ -21,8 +21,12 @@ private:
     StateMachine<PizzaStoreOwner>* m_pStateMachine;
     location_type         m_Location;
     int                   m_iFatigue;
+    bool                  isStudentOrder;
+    bool                  m_iCooking;
 public:
     PizzaStoreOwner(int id) : m_Location(home),
+        isStudentOrder(false),
+        m_iCooking(false),
         BaseGameEntity(id)
     {
         m_pStateMachine = new StateMachine<PizzaStoreOwner>(this);
@@ -38,9 +42,19 @@ public:
 
     location_type Location()const { return m_Location; }
     void          ChangeLocation(location_type loc) { m_Location = loc; }
+   
 
     bool          Fatigued() const;
     bool          Rested() const;
+
+    void          ReadyForOrder() { isStudentOrder = false; };
+
+    void          GetOrder(bool IsForStudent);
+    bool          IsForStudent() const { return isStudentOrder; }
+    bool          IsCooking() const { return m_iCooking; }
+    void          SetCooking() { m_iCooking = true; }
+    void          FinishCooking() { m_iCooking = false; }
+
     void          DecreaseFatigue() { m_iFatigue -= 2; }
     void          IncreaseFatigue() { m_iFatigue += 1; }
 };

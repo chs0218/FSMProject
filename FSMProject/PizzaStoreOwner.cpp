@@ -31,3 +31,8 @@ bool PizzaStoreOwner::Rested() const
     }
     return false;
 }
+
+void PizzaStoreOwner::GetOrder(bool IsForStudent)
+{
+    isStudentOrder = IsForStudent;
+}

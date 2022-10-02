@@ -61,17 +61,39 @@ public:
 	virtual bool OnMessage(PizzaStoreOwner* pPSO, const Telegram& msg);
 };
 
-class GetPizzaOrder : public State<PizzaStoreOwner>
+class MakePizza : public State<PizzaStoreOwner>
 {
 private:
 
-	GetPizzaOrder() {}
-	GetPizzaOrder(const GetPizzaOrder&);
-	GetPizzaOrder& operator=(const GetPizzaOrder&);
+	MakePizza() {}
+	MakePizza(const MakePizza&);
+	MakePizza& operator=(const MakePizza&);
 
 public:
 
-	static GetPizzaOrder* Instance();
+	static MakePizza* Instance();
+
+	virtual void Enter(PizzaStoreOwner* pPSO);
+
+	virtual void Execute(PizzaStoreOwner* pPSO);
+
+	virtual void Exit(PizzaStoreOwner* pPSO);
+
+	virtual bool OnMessage(PizzaStoreOwner* pPSO, const Telegram& msg);
+
+};
+
+class RequestDeliver : public State<PizzaStoreOwner>
+{
+private:
+
+	RequestDeliver() {}
+	RequestDeliver(const RequestDeliver&);
+	RequestDeliver& operator=(const RequestDeliver&);
+
+public:
+
+	static RequestDeliver* Instance();
 
 	virtual void Enter(PizzaStoreOwner* pPSO);
 

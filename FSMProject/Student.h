@@ -26,6 +26,8 @@ private:
     int                   m_iLeftStudy;
     int                   m_iHungry;
     int                   m_iFatigue;
+    bool                  m_iWaiting;
+    bool                  is_PizzaAccepted;
 public:
     Student(int id) : m_Location(home),
         m_iLeftStudy(3),
@@ -35,6 +37,7 @@ public:
     {
         m_pStateMachine = new StateMachine<Student>(this);
         m_pStateMachine->SetCurrentState(StayHomeAndRest::Instance());
+        m_pStateMachine->SetGlobalState(StudentGlobalState::Instance());
     }
     ~Student() { delete m_pStateMachine; }
 
@@ -51,6 +54,15 @@ public:
     void          DoStudy() { m_iLeftStudy -= 1; }
     bool          FinishStudy()const { return m_iLeftStudy < 1; }
     bool          HaveToStudy()const { return m_iLeftStudy >= StudyLevel; }
+
+    void          SetWaiting() { m_iWaiting = true; }
+    void          SetNotWaiting() { m_iWaiting = false; }
+    bool          Waiting() const { return m_iWaiting; }
+
+    void          SetPizzaAccpeted() { is_PizzaAccepted = true; }
+    void          SetPizzaDeclined() { is_PizzaAccepted = false; }
+    bool          PizzaAccepted() const { return is_PizzaAccepted; }
+
 
     bool          Fatigued() const;
     bool          Rested() const;

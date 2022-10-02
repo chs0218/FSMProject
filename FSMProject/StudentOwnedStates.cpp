@@ -3,6 +3,34 @@
 #include "Locations.h"
 #include "State.h"
 #include "EntityNames.h"
+#include "CrudeTimer.h"
+#include "Telegram.h"
+#include "MessageDispatcher.h"
+#include "MessageTypes.h"
+
+double MotherCallingChance() { return ((rand()) / (RAND_MAX + 1.0)); }
+
+StudentGlobalState* StudentGlobalState::Instance()
+{
+    static StudentGlobalState instance;
+
+    return &instance;
+}
+
+
+void StudentGlobalState::Execute(Student* pStudent)
+{
+    if (MotherCallingChance() < 0.2)
+    {
+        pStudent->GetFSM()->ChangeState(CallAndTalkToParent::Instance());
+    }
+}
+
+bool StudentGlobalState::OnMessage(Student* pStudent, const Telegram& msg)
+{
+    return false;
+
+}
 
 StayHomeAndRest* StayHomeAndRest::Instance()
 {
@@ -29,7 +57,7 @@ void StayHomeAndRest::Execute(Student* pStudent)
     pStudent->IncreaseHunger();
     pStudent->DecreaseFatigue();
     if (pStudent->Hungry())
-        pStudent->GetFSM()->ChangeState(EatPizza::Instance());
+        pStudent->GetFSM()->ChangeState(OrderPizza::Instance());
 
     if (pStudent->Rested())
     {
@@ -54,44 +82,132 @@ bool StayHomeAndRest::OnMessage(Student* pStudent, const Telegram& msg)
     return false;
 }
 
-EatPizza* EatPizza::Instance()
+OrderPizza* OrderPizza::Instance()
 {
-    static EatPizza instance;
+    static OrderPizza instance;
 
     return &instance;
 }
 
 
-void EatPizza::Enter(Student* pStudent)
+void OrderPizza::Enter(Student* pStudent)
 {
     std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "배고프다! 피자를 먹어야겠어!!";
-    if (pStudent->Location() != home)
+    Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
+        pStudent->ID(),        //ID of sender
+        ent_PizzaStoreOwner,   //ID of recipient
+        Msg_DeliverMePizza,    //the message
+        NO_ADDITIONAL_INFO);
+}
+
+
+void OrderPizza::Execute(Student* pStudent)
+{
+    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": "
+        << "피자 주문 중..";
+}
+
+
+void OrderPizza::Exit(Student* pStudent)
+{
+}
+
+
+bool OrderPizza::OnMessage(Student* pStudent, const Telegram& msg)
+{
+    switch (msg.Msg)
     {
-        pStudent->ChangeLocation(home);
+    case Msg_PizzaStoreNotResponse:
+    {
+        std::cout << "\nMessage handled by " << GetNameOfEntity(pStudent->ID()) << " at time: "
+            << Clock->GetCurrentTime();
+
+        SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) <<
+            ": 뭐야 이 피자집 전화를 안 받네.. 다른 피자집에서 시켜먹어야겠다";
+
+        pStudent->SetPizzaDeclined();
+        pStudent->GetFSM()->ChangeState(WaitAndEatPizza::Instance());
+    }
+    return true;
+    case Msg_PizzaStoreResponse:
+    {
+        std::cout << "\nMessage handled by " << GetNameOfEntity(pStudent->ID()) << " at time: "
+            << Clock->GetCurrentTime();
+
+        SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) <<
+            ": 피자 주문 완료!!";
+
+        pStudent->SetPizzaAccpeted();
+        pStudent->GetFSM()->ChangeState(WaitAndEatPizza::Instance());
+    }
+    return true;
+    }
+    return false;
+}
+
+WaitAndEatPizza* WaitAndEatPizza::Instance()
+{
+    static WaitAndEatPizza instance;
+
+    return &instance;
+}
+
+
+void WaitAndEatPizza::Enter(Student* pStudent)
+{
+    if (!pStudent->Waiting())
+    {
+        if (!pStudent->PizzaAccepted())
+        {
+            Dispatch->DispatchMessage(2.5, //time delay
+                pStudent->ID(),        //ID of sender
+                ent_Student,   //ID of recipient
+                Msg_PizzaArrived,    //the message
+                NO_ADDITIONAL_INFO);
+        }
+
+        pStudent->SetWaiting();
     }
 }
 
 
-void EatPizza::Execute(Student* pStudent)
-{
-    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "피자는 역시 맛있어";
-    pStudent->BuyAndEatPizza();
-    pStudent->GetFSM()->ChangeState(StayHomeAndRest::Instance());
-}
-
-
-void EatPizza::Exit(Student* pStudent)
+void WaitAndEatPizza::Execute(Student* pStudent)
 {
     std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": "
-        << "아 배부르다! 다시 쉬어볼까~";
+        << "피자 언제오려나~";
 }
 
 
-bool EatPizza::OnMessage(Student* pStudent, const Telegram& msg)
+void WaitAndEatPizza::Exit(Student* pStudent)
 {
-    //send msg to global message handler
+}
+
+
+bool WaitAndEatPizza::OnMessage(Student* pStudent, const Telegram& msg)
+{
+    switch (msg.Msg)
+    {
+    case Msg_PizzaArrived:
+    {
+        std::cout << "\nMessage handled by " << GetNameOfEntity(pStudent->ID()) << " at time: "
+            << Clock->GetCurrentTime();
+
+        SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "피자 도착했다!! 잘 먹겠습니다~";
+        pStudent->BuyAndEatPizza();
+        pStudent->SetNotWaiting();
+        pStudent->GetFSM()->ChangeState(StayHomeAndRest::Instance());
+    }
+    return true;
+    }
     return false;
 }
+
 
 PlayGame* PlayGame::Instance()
 {
@@ -103,9 +219,9 @@ PlayGame* PlayGame::Instance()
 
 void PlayGame::Enter(Student* pStudent)
 {
-    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "게임하러가야겠다~!!";
     if (pStudent->Location() != pcRoom)
     {
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "게임하러가야겠다~!!";
         pStudent->ChangeLocation(pcRoom);
     }
 }
@@ -132,8 +248,6 @@ void PlayGame::Execute(Student* pStudent)
 
 void PlayGame::Exit(Student* pStudent)
 {
-    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": "
-        << "게임 끝~";
 }
 
 
@@ -153,9 +267,9 @@ GoLibraryAndStudy* GoLibraryAndStudy::Instance()
 
 void GoLibraryAndStudy::Enter(Student* pStudent)
 {
-    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "공부하러가야해...";
     if (pStudent->Location() != library)
     {
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "공부하러가야해...";
         pStudent->ChangeLocation(library);
     }
 }
@@ -197,5 +311,50 @@ void GoLibraryAndStudy::Exit(Student* pStudent)
 bool GoLibraryAndStudy::OnMessage(Student* pStudent, const Telegram& msg)
 {
     //send msg to global message handler
+    return false;
+}
+
+CallAndTalkToParent* CallAndTalkToParent::Instance()
+{
+    static CallAndTalkToParent instance;
+
+    return &instance;
+}
+
+
+void CallAndTalkToParent::Enter(Student* pStudent)
+{
+    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "어? 부모님한테 전화왔다.";
+}
+
+
+void CallAndTalkToParent::Execute(Student* pStudent)
+{
+    switch (pStudent->Location())
+    {
+    case home:
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "여보세요? 나 지금 집이야";
+        break;
+    case library:
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "여보세요? 나 지금 도서관이야";
+        break;
+    case pcRoom:
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "여보세요? 나 지금 PC방이야";
+        break;
+    }
+
+    pStudent->GetFSM()->RevertToPreviousState();
+}
+
+
+void CallAndTalkToParent::Exit(Student* pStudent)
+{
+    std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": "
+        << "전화 끝~";
+}
+
+
+bool CallAndTalkToParent::OnMessage(Student* pStudent, const Telegram& msg)
+{
     return false;
 }

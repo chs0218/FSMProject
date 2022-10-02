@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Telegram.h"
 
 class BaseGameEntity
 {
@@ -11,6 +12,6 @@ public:
 	BaseGameEntity(int id){ SetID(id); }
 	virtual ~BaseGameEntity() {}
 	virtual void  Update() {}
-	// virtual bool  HandleMessage(const Telegram& msg) = 0;
+	virtual bool  HandleMessage(const Telegram& msg) = 0;
 	int           ID()const { return m_ID; }
 };
