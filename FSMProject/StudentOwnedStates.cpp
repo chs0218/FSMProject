@@ -184,6 +184,8 @@ void WaitAndEatPizza::Execute(Student* pStudent)
 
 void WaitAndEatPizza::Exit(Student* pStudent)
 {
+    if(!pStudent->Waiting())
+        std::cout << "\n" << GetNameOfEntity(pStudent->ID()) << ": " << "피자 맛있었다! 잘 먹었습니다~";
 }
 
 

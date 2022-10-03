@@ -13,6 +13,8 @@ int main()
 	//seed random number generator
 	srand((unsigned)time(NULL));
 
+	std::cout << "FSM 과제(2018180044 최해성)" << std::endl;
+
 	//create a student
 	Student* Kim = new Student(ent_Student);
 	PizzaStoreOwner* Lee = new PizzaStoreOwner(ent_PizzaStoreOwner);

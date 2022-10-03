@@ -182,6 +182,8 @@ void MakePizza::Enter(PizzaStoreOwner* pPSO)
 
 void MakePizza::Execute(PizzaStoreOwner* pPSO)
 {
+    SetTextColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
     std::cout << "\n" << GetNameOfEntity(pPSO->ID()) << ": " << "맛있는 피자를 만드는 중..";
 }
 
